@@ -63,6 +63,35 @@
       </tbody>
     </table>
 
+    <section class="review-panel">
+      <h3 class="panel-title">待复核清单（隐患销号结果）</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>抢修编号</th>
+            <th>故障管段</th>
+            <th>故障类型</th>
+            <th>抢修队</th>
+            <th>恢复时间</th>
+            <th>复核状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in reviewRows" :key="String(row.id)">
+            <td>{{ row['抢修编号'] }}</td>
+            <td>{{ row['故障管段'] }}</td>
+            <td>{{ row['故障类型'] }}</td>
+            <td>{{ row['抢修队'] }}</td>
+            <td>{{ row['恢复时间'] }}</td>
+            <td>{{ row['抢修状态'] }}</td>
+          </tr>
+          <tr v-if="!reviewRows.length">
+            <td colspan="6" class="empty-state">暂无待复核的隐患销号记录</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
     <footer class="page-foot">
       <span>共 {{ total }} 条抢修处置记录</span>
       <span v-if="errorMessage" class="error-text">{{ errorMessage }}</span>
@@ -92,6 +121,8 @@ const total = ref(0)
 const errorMessage = ref('')
 const filters = ref<Record<string, string>>({})
 const filterFields = columns.slice(0, 3)
+// 待复核清单不受上方筛选条件影响，销号结果一进来就能在这里看到。
+const reviewRows = ref<EntryRow[]>([])
 const statusSummary = computed(() =>
   statuses.map((status: string) => ({
     status,
@@ -128,6 +159,9 @@ function reload() {
     const payload = listEntries(meta.key, filters.value)
     rows.value = payload.items
     total.value = payload.total
+    reviewRows.value = listEntries(meta.key).items.filter(
+      (row) => String(row['抢修状态']) === '待复核',
+    )
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : '抢修处置列表读取失败'
   }

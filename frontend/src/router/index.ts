@@ -15,6 +15,7 @@ const Makeupwater = () => import('@/views/makeupwater/index.vue')
 const Hxclean = () => import('@/views/hxclean/index.vue')
 const Boilerroom = () => import('@/views/boilerroom/index.vue')
 const Leakdetect = () => import('@/views/leakdetect/index.vue')
+const Pipehazard = () => import('@/views/pipehazard/index.vue')
 const Compensator = () => import('@/views/compensator/index.vue')
 const Heatnotice = () => import('@/views/heatnotice/index.vue')
 const Heatbilling = () => import('@/views/heatbilling/index.vue')
@@ -38,6 +39,7 @@ const router = createRouter({
     { path: '/hxclean', name: 'hxclean', component: Hxclean },
     { path: '/boilerroom', name: 'boilerroom', component: Boilerroom },
     { path: '/leakdetect', name: 'leakdetect', component: Leakdetect },
+    { path: '/pipehazard', name: 'pipehazard', component: Pipehazard },
     { path: '/compensator', name: 'compensator', component: Compensator },
     { path: '/heatnotice', name: 'heatnotice', component: Heatnotice },
     { path: '/heatbilling', name: 'heatbilling', component: Heatbilling },
