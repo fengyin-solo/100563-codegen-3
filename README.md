@@ -50,6 +50,8 @@ npm run build
 | 水力平衡 | `hydraulic` | 平衡调节记录 | 调节编号、换热站、调节回路 |
 | 热计量抄表 | `heatmeter` | 热计量抄表记录 | 抄表编号、计量表号、用户名称 |
 | 抢修处置 | `emergencyrepair` | 抢修记录 | 抢修编号、故障管段、故障类型 |
+| 管网隐患台账 | `hazardledger` | 管网隐患点 | 隐患编号、隐患点位置、所属管段、风险分级、督办整改人、督办轮次、督办期限、销号日期 |
+| 隐患销号 | `hazardclose`（页面，路由 `/hazardclose`） | 管网隐患点销号 | 与隐患台账共用 `hazardledger` 同一份数据：办理销号、已销号台账 |
 | 阀门井维护 | `valvewell` | 阀门井 | 井编号、所属管段、井盖状况 |
 | 循环泵运维 | `circpump` | 循环泵 | 泵编号、所属换热站、泵型号 |
 | 补水定压 | `makeupwater` | 补水定压记录 | 记录编号、换热站、补水量 |
@@ -68,4 +70,9 @@ npm run build
 - 字段、状态、动作与流转目标集中在 `frontend/src/data/modules.ts`；示例数据在
   `frontend/src/data/seed.ts`。
 - 状态流转只允许在 `local-service.ts` 里改，页面组件不做业务判断。
+- 隐患分级管控（`hazardledger`）特殊规则也都在 `local-service.ts`：沿用重大/较大/一般/低四档
+  既有口径（兼容红橙黄蓝、Ⅰ–Ⅳ 等等价写法）；挂号统一挂「重大风险」起步，只能逐档督办降级，
+  跨级/回退一律挡回；同一隐患点重复挂号按第一次认。销号页与台账页共用 `hazardRows` 同一份数据，
+  销号日期缺失或不是真实日期的不予受理；销号后自动在抢修处置生成「待复核」单，复核通过才移出
+  待复核清单（`repairReviewRows` / `reviewRepair`）。
 - 想回到初始数据：清掉浏览器里 `district-heating:entries` 这一项，或调用 `resetModule(模块)`。
